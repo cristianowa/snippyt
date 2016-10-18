@@ -1,0 +1,16 @@
+div.centered {
+    position:fixed;
+    top: 3%;
+    left: 25%;
+    width:75%;
+    height:94%;
+    margin-top: 3%; /*set to a negative number 1/2 of your height*/
+    margin-bottom: 3%;
+    margin-left: -15em; /*set to a negative number 1/2 of your width*/
+    border: 1px solid #ccc;
+    background-color: #f3f3f3;
+}
+
+textarea.ta {
+    height: 300px;
+}
