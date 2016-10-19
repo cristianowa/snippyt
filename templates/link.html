@@ -5,18 +5,28 @@
     <link rel="stylesheet" href="/style.css">
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-    <script src="/clipboard.js"></script>
+    <script src="/clipboard.min.js"></script>
 </head>
 <body>
 <div class="centered">
-<!-- Target -->
-<input id="copy" value= {{ link }}>
+    <!-- Target -->
+<input id="foo" value={{  link }}>
 
 <!-- Trigger -->
-<button class="btn" data-clipboard-target="#copy">
-    Copy !
+<button class="btn" data-clipboard-target="#foo">
+    <img src="clippy.svg" style="width: 20px" alt="Copy to clipboard">
 </button>
 </div>
+<script>
+    var clipboard = new Clipboard('.btn');
+    clipboard.on('success', function(e) {
+        alert("SUC");
+    });
+    clipboard.on('error', function(e) {
+        alert("ERR");
+    });
+</script>
+
 </body>
 </html>
 
