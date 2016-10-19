@@ -92,10 +92,18 @@ if __name__ == '__main__':
             print serve.format_usage()
     elif args.command ==  "post":
         try:
+            import json
             ans = post_snippet(args.post_server, args.post_content, args.post_title)
             if ans.status_code >= 400:
                 print "Error posting, code: {0}".format(ans.status_code)
-            print ans.content
+            link = json.loads(ans.content)["link"]
+            print link
+            try:
+                import pyperclip
+                pyperclip.copy(link)
+                print "Text copied to clipboard"
+            except:
+                pass
         except:
             if args.debug:
                 traceback.print_exc()
