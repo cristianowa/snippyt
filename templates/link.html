@@ -20,10 +20,10 @@
 <script>
     var clipboard = new Clipboard('.btn');
     clipboard.on('success', function(e) {
-        alert("SUC");
+        console.log("");
     });
     clipboard.on('error', function(e) {
-        alert("ERR");
+        console.log(e);
     });
 </script>
 
