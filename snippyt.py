@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from flask import Flask, request, redirect, jsonify
 import flask
 import argparse
