@@ -16,14 +16,14 @@ shelve_name = None
 
 def get_code(uuid):
     s = shelve.open(shelve_name)
-    source_code = s[str(uuid)]
+    source_code, title = s[str(uuid)]
     s.close()
-    return source_code
+    return source_code, title
 
-def add_code(source_code):
+def add_code(source_code, title):
     uuid = get_uuid()
     s = shelve.open(shelve_name)
-    s[uuid] = source_code
+    s[uuid] = (source_code, title)
     s.sync()
     s.close()
     return uuid
@@ -34,8 +34,8 @@ def static_send(filename):
 
 @app.route("/code/<uuid>", methods=["GET", "DEL"])
 def get_snippet(uuid):
-    code = get_code(uuid)
-    return flask.render_template('code.html', source_code=code)
+    code, title = get_code(uuid)
+    return flask.render_template('code.html', source_code=code, source_title=title)
 
 @app.route("/link/<uuid>")
 def get_link(uuid):
@@ -47,7 +47,7 @@ def poster():
     if request.method == "GET":
         return  app.send_static_file("post.html")
     print request.form["source_code"]
-    uuid = add_code(request.form["source_code"])
+    uuid = add_code(request.form["source_code"], request.form["title"])
     try:
         if request.form["script"].lower() == 'true':
             return jsonify(dict(link=request.base_url + "code/{0}".format(uuid)))
@@ -92,7 +92,7 @@ if __name__ == '__main__':
             if args.debug:
                 traceback.print_exc()
             print serve.format_usage()
-    elif args.command ==  "post":
+    elif args.command == "post":
         try:
             import json
             if args.post_file is not None:
@@ -111,10 +111,15 @@ if __name__ == '__main__':
                 print "Text copied to clipboard"
             except:
                 pass
-        except:
+        except Exception as e:
+
             if args.debug:
                 traceback.print_exc()
-            print post.format_usage()
+            from requests.exceptions import ConnectionError
+            if isinstance(e, ConnectionError):
+                print "Server not available"
+            else:
+                print post.format_usage()
 
     else:
         print p.format_usage()
